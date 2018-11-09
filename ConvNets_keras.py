@@ -188,7 +188,7 @@ def plot_history(history):
     pyplot.plot(history.history['val_acc'])
     pyplot.title('Model accuracy')
     pyplot.xlabel('Epoch')
-    pyplot.legend(['Train', 'Validation'], loc='upper left')
+    pyplot.legend(['Train', 'Test'], loc='upper left')
     pyplot.show()
 
     # Plot training & validation loss values
@@ -197,24 +197,24 @@ def plot_history(history):
     pyplot.title('Model loss')
     pyplot.ylabel('Loss')
     pyplot.xlabel('Epoch')
-    pyplot.legend(['Train', 'Validation'], loc='upper left')
+    pyplot.legend(['Train', 'Test'], loc='upper left')
     pyplot.show()
 
 # Part B and C of the Project. Train, Test, and Evaluate on centered data
 if run_bc_conv:
     # build the CNN model for part b and c of the project
     model = part_bcd_conv_model()
-    bc_conv_history = model.fit(Train_centered, y_train_centered, validation_data=(Validation_centered, y_validation_centered), epochs=2, batch_size=200)
+    bc_conv_history = model.fit(Train_centered, y_train_centered, validation_data=(Validation_centered, y_validation_centered), epochs=10, batch_size=200)
     scores = model.evaluate(Test_centered, y_test_centered, verbose=0)
     print("Centered Trained & Tested CNN Error: %.2f%%" % (100-scores[1]*100))
     plot_history(bc_conv_history)
-
 if run_bc_3:
     # build the CNN model for part b and c of the project
     model = part_bcd_3_model()
     bc_3_history = model.fit(Train_centered, y_train_centered, validation_data=(Validation_centered, y_validation_centered), epochs=10, batch_size=200)
     scores = model.evaluate(Test_centered, y_test_centered, verbose=0)
     print("Centered Trained & Tested 3-Layer Network Error: %.2f%%" % (100-scores[1]*100))
+    plot_history(bc_3_history)
 
 # Part D subpart 1 of the Project. Train on centered data, Test on uncentered data
 if run_d1_conv:
@@ -223,12 +223,14 @@ if run_d1_conv:
     d1_conv_history = model.fit(Train_uncentered, y_train_uncentered, validation_data=(Validation_uncentered, y_validation_uncentered), epochs=10, batch_size=200)
     scores = model.evaluate(Test_uncentered, y_test_uncentered, verbose=0)
     print("Centered Trained & Uncentered Tested CNN Error: %.2f%%" % (100-scores[1]*100))
+    plot_history(d1_conv_history)
 if run_d1_3:
     # build the CNN model for part b and c of the project
     model = part_bcd_3_model()
     d1_3_history = model.fit(Train_uncentered, y_train_uncentered, validation_data=(Validation_uncentered, y_validation_uncentered), epochs=10, batch_size=200)
     scores = model.evaluate(Test_uncentered, y_test_uncentered, verbose=0)
     print("Centered Trained & Uncentered Tested 3-Layer Network Error: %.2f%%" % (100-scores[1]*100))
+    plot_history(d1_3_history)
 
 # Part D subpart 2 of the Project. Train on centered + uncentered data, Test on centered + uncentered data
 if run_d2_conv:
@@ -237,16 +239,19 @@ if run_d2_conv:
     d2_conv_history = model.fit(Train_centered_uncentered, y_train_centered_uncentered, validation_data=(Validation_centered_uncentered, y_validation_centered_uncentered), epochs=10, batch_size=200)
     scores = model.evaluate(Test_centered_uncentered, y_test_centered_uncentered, verbose=0)
     print("Centered-Uncentered Trained & Centered-Uncentered Tested CNN Error: %.2f%%" % (100-scores[1]*100))
+    plot_history(d2_conv_history)
 if run_d2_3:
     # build the CNN model for part b and c of the project
     model = part_bcd_3_model()
     d2_3_history = model.fit(Train_centered_uncentered, y_train_centered_uncentered, validation_data=(Validation_centered_uncentered, y_validation_centered_uncentered), epochs=10, batch_size=200)
     scores = model.evaluate(Test_centered_uncentered, y_test_centered_uncentered, verbose=0)
     print("Centered-Uncentered Trained & Centered-Uncentered Tested 3-Layer Network Error: %.2f%%" % (100-scores[1]*100))
+    plot_history(d2_3_history)
 
 # Part E / Competition of the Project.
 if competition:
     model = competition_model()
-    model.fit(Train_psi, y_train_psi, epochs=1, batch_size=200)
+    competition_history = model.fit(Train_psi, y_train_psi, epochs=1, batch_size=200)
     scores = model.evaluate(Test_psi, y_test_psi, verbose=0)
     print("Centered Trained & Tested CNN Error: %.2f%%" % (100 - scores[1] * 100))
+    plot_history(competition_history)
