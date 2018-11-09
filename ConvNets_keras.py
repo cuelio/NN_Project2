@@ -13,7 +13,9 @@ dataset_dir = "data/"
 
 K.set_image_dim_ordering('th')
 
-# load training data
+# CENTERED DATA
+
+# load centered training data
 
 with open(dataset_dir + "centered_data/TrainC.pickle", 'rb') as file_reader:
     centered_train_data = pickle.load(file_reader, encoding="latin1")
@@ -21,7 +23,7 @@ with open(dataset_dir + "centered_data/TrainC.pickle", 'rb') as file_reader:
 with open(dataset_dir + "centered_data/TrainC_Lbs.pickle", 'rb') as file_reader:
     centered_train_data_labels = pickle.load(file_reader, encoding="latin1")
 
-# load validation data
+# load centered test data
 
 with open(dataset_dir + "centered_data/TestC.pickle", 'rb') as file_reader:
     centered_validation_data = pickle.load(file_reader, encoding="latin1")
@@ -29,13 +31,59 @@ with open(dataset_dir + "centered_data/TestC.pickle", 'rb') as file_reader:
 with open(dataset_dir + "centered_data/TestC_Lbs.pickle", 'rb') as file_reader:
     centered_validation_data_labels = pickle.load(file_reader, encoding="latin1")
 
-# load test data
+# load centered validation data
 
 with open(dataset_dir + "centered_data/ValidationC.pickle", 'rb') as file_reader:
     centered_test_data = pickle.load(file_reader, encoding="latin1")
 
 with open(dataset_dir + "centered_data/ValidationC_Lbs.pickle", 'rb') as file_reader:
     centered_test_data_labels = pickle.load(file_reader, encoding="latin1")
+
+
+# NON CENTERED DATA
+
+# load uncentered training data
+
+with open(dataset_dir + "uncentered_data/TrainNC.pickle", 'rb') as file_reader:
+    uncentered_train_data = pickle.load(file_reader, encoding="latin1")
+
+with open(dataset_dir + "uncentered_data/TrainNC_Lbs.pickle", 'rb') as file_reader:
+    uncentered_train_data_labels = pickle.load(file_reader, encoding="latin1")
+
+# load uncentered test data
+
+with open(dataset_dir + "uncentered_data/TestNC.pickle", 'rb') as file_reader:
+    uncentered_validation_data = pickle.load(file_reader, encoding="latin1")
+
+with open(dataset_dir + "uncentered_data/TestNC_Lbs.pickle", 'rb') as file_reader:
+    uncentered_validation_data_labels = pickle.load(file_reader, encoding="latin1")
+
+# load uncentered validation data
+
+with open(dataset_dir + "uncentered_data/ValidationNC.pickle", 'rb') as file_reader:
+    uncentered_test_data = pickle.load(file_reader, encoding="latin1")
+
+with open(dataset_dir + "uncentered_data/ValidationNC_Lbs.pickle", 'rb') as file_reader:
+    uncentered_test_data_labels = pickle.load(file_reader, encoding="latin1")
+
+
+# POSITION AND SIZE INVARIANT
+
+# load position and size invariant training data
+
+with open(dataset_dir + "position_and_size_invariant/TrainNCS.pickle", 'rb') as file_reader:
+    psi_train_data = pickle.load(file_reader, encoding="latin1")
+
+with open(dataset_dir + "position_and_size_invariant/TrainNCS_Lbs.pickle", 'rb') as file_reader:
+    psi_train_data_labels = pickle.load(file_reader, encoding="latin1")
+
+# load position and size invariant test data
+
+with open(dataset_dir + "position_and_size_invariant/TestNCS.pickle", 'rb') as file_reader:
+    psi_validation_data = pickle.load(file_reader, encoding="latin1")
+
+with open(dataset_dir + "position_and_size_invariant/TestNCS_Lbs.pickle", 'rb') as file_reader:
+    psi_validation_data_labels = pickle.load(file_reader, encoding="latin1")
 
 # Visualize the first 9 samples
 # print(centered_train_data.shape)
@@ -83,7 +131,7 @@ def larger_model():
 print("Starting to test model")
 model = larger_model()
 # Fit the model
-model.fit(Train, y_train, validation_data=(Validation, y_validation), epochs=10, batch_size=200)
+model.fit(Train, y_train, validation_data=(Validation, y_validation), epochs=1, batch_size=200)
 # Final evaluation of the model
 scores = model.evaluate(Test, y_test, verbose=0)
 print("CNN Error: %.2f%%" % (100-scores[1]*100))
