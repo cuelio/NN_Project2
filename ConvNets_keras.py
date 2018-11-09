@@ -166,25 +166,53 @@ def competition_model():
     return model
 
 # Booleans for running different parts of the Project / Competition
-run_bc_conv = False
+run_bc_conv = True
 run_bc_3 = False
 run_d1_conv = False
 run_d1_3 = False
 run_d2_conv = False
 run_d2_3 = False
-competition = True
+competition = False
+
+bc_conv_history = None
+bc_3_history = None
+d1_conv_history = None
+d1_3_history = None
+d2_conv_history = None
+d2_3_history = None
+
+# plots training loss and validation loss after each epoch
+def plot_history(history):
+    # Plot training & validation accuracy values
+    pyplot.plot(history.history['acc'])
+    pyplot.plot(history.history['val_acc'])
+    pyplot.title('Model accuracy')
+    pyplot.xlabel('Epoch')
+    pyplot.legend(['Train', 'Validation'], loc='upper left')
+    pyplot.show()
+
+    # Plot training & validation loss values
+    pyplot.plot(history.history['loss'])
+    pyplot.plot(history.history['val_loss'])
+    pyplot.title('Model loss')
+    pyplot.ylabel('Loss')
+    pyplot.xlabel('Epoch')
+    pyplot.legend(['Train', 'Validation'], loc='upper left')
+    pyplot.show()
 
 # Part B and C of the Project. Train, Test, and Evaluate on centered data
 if run_bc_conv:
     # build the CNN model for part b and c of the project
     model = part_bcd_conv_model()
-    model.fit(Train_centered, y_train_centered, validation_data=(Validation_centered, y_validation_centered), epochs=10, batch_size=200)
+    bc_conv_history = model.fit(Train_centered, y_train_centered, validation_data=(Validation_centered, y_validation_centered), epochs=2, batch_size=200)
     scores = model.evaluate(Test_centered, y_test_centered, verbose=0)
     print("Centered Trained & Tested CNN Error: %.2f%%" % (100-scores[1]*100))
+    plot_history(bc_conv_history)
+
 if run_bc_3:
     # build the CNN model for part b and c of the project
     model = part_bcd_3_model()
-    model.fit(Train_centered, y_train_centered, validation_data=(Validation_centered, y_validation_centered), epochs=10, batch_size=200)
+    bc_3_history = model.fit(Train_centered, y_train_centered, validation_data=(Validation_centered, y_validation_centered), epochs=10, batch_size=200)
     scores = model.evaluate(Test_centered, y_test_centered, verbose=0)
     print("Centered Trained & Tested 3-Layer Network Error: %.2f%%" % (100-scores[1]*100))
 
@@ -192,13 +220,13 @@ if run_bc_3:
 if run_d1_conv:
     # build the CNN model for part b and c of the project
     model = part_bcd_conv_model()
-    model.fit(Train_uncentered, y_train_uncentered, validation_data=(Validation_uncentered, y_validation_uncentered), epochs=10, batch_size=200)
+    d1_conv_history = model.fit(Train_uncentered, y_train_uncentered, validation_data=(Validation_uncentered, y_validation_uncentered), epochs=10, batch_size=200)
     scores = model.evaluate(Test_uncentered, y_test_uncentered, verbose=0)
     print("Centered Trained & Uncentered Tested CNN Error: %.2f%%" % (100-scores[1]*100))
 if run_d1_3:
     # build the CNN model for part b and c of the project
     model = part_bcd_3_model()
-    model.fit(Train_uncentered, y_train_uncentered, validation_data=(Validation_uncentered, y_validation_uncentered), epochs=10, batch_size=200)
+    d1_3_history = model.fit(Train_uncentered, y_train_uncentered, validation_data=(Validation_uncentered, y_validation_uncentered), epochs=10, batch_size=200)
     scores = model.evaluate(Test_uncentered, y_test_uncentered, verbose=0)
     print("Centered Trained & Uncentered Tested 3-Layer Network Error: %.2f%%" % (100-scores[1]*100))
 
@@ -206,13 +234,13 @@ if run_d1_3:
 if run_d2_conv:
     # build the CNN model for part b and c of the project
     model = part_bcd_conv_model()
-    model.fit(Train_centered_uncentered, y_train_centered_uncentered, validation_data=(Validation_centered_uncentered, y_validation_centered_uncentered), epochs=10, batch_size=200)
+    d2_conv_history = model.fit(Train_centered_uncentered, y_train_centered_uncentered, validation_data=(Validation_centered_uncentered, y_validation_centered_uncentered), epochs=10, batch_size=200)
     scores = model.evaluate(Test_centered_uncentered, y_test_centered_uncentered, verbose=0)
     print("Centered-Uncentered Trained & Centered-Uncentered Tested CNN Error: %.2f%%" % (100-scores[1]*100))
 if run_d2_3:
     # build the CNN model for part b and c of the project
     model = part_bcd_3_model()
-    model.fit(Train_centered_uncentered, y_train_centered_uncentered, validation_data=(Validation_centered_uncentered, y_validation_centered_uncentered), epochs=10, batch_size=200)
+    d2_3_history = model.fit(Train_centered_uncentered, y_train_centered_uncentered, validation_data=(Validation_centered_uncentered, y_validation_centered_uncentered), epochs=10, batch_size=200)
     scores = model.evaluate(Test_centered_uncentered, y_test_centered_uncentered, verbose=0)
     print("Centered-Uncentered Trained & Centered-Uncentered Tested 3-Layer Network Error: %.2f%%" % (100-scores[1]*100))
 
