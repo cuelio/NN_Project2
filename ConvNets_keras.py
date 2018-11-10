@@ -92,9 +92,8 @@ with open(dataset_dir + "position_and_size_invariant/TestNCS_Lbs.pickle", 'rb') 
     psi_test_data_labels = pickle.load(file_reader, encoding="latin1")
 
 # Visualize the first 9 samples
-#
-# print(centered_train_data.shape)
-# test_new_img_plt = centered_train_data.reshape(55000, 784)
+
+# test_new_img_plt = psi_train_data.reshape(55000, 784)
 # for i in range(0, 9):
 #     pyplot.subplot(330 + 1 + i)
 #     pyplot.imshow(test_new_img_plt[i+9].reshape(28, 28), cmap=pyplot.get_cmap('gray'))
@@ -154,25 +153,26 @@ def part_bcd_3_model():
 
 def competition_model():
     model = Sequential()
-    model.add(Conv2D(32, (5, 5), input_shape=(1, 28, 28), activation='relu'))
-    model.add(MaxPooling2D(pool_size=(2, 2)))
-    model.add(Conv2D(32, (5, 5), input_shape=(1, 28, 28), activation='relu'))
-    model.add(MaxPooling2D(pool_size=(2, 2)))
+    model.add(Conv2D(64, (5, 5), input_shape=(1, 28, 28), activation='relu'))
+    model.add(MaxPooling2D(pool_size=(2, 2), strides=1))
+    model.add(Conv2D(32, (5, 5), activation='relu'))
+    model.add(MaxPooling2D(pool_size=(2, 2), strides=2))
     model.add(Dropout(0.2))
     model.add(Flatten())
     model.add(Dense(128, activation='relu'))
+    model.add(Dropout(0.2))
     model.add(Dense(num_classes, activation='softmax'))
     model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
     return model
 
 # Booleans for running different parts of the Project / Competition
-run_bc_conv = True
+run_bc_conv = False
 run_bc_3 = False
 run_d1_conv = False
 run_d1_3 = False
 run_d2_conv = False
 run_d2_3 = False
-competition = False
+competition = True
 
 bc_conv_history = None
 bc_3_history = None
@@ -251,7 +251,7 @@ if run_d2_3:
 # Part E / Competition of the Project.
 if competition:
     model = competition_model()
-    competition_history = model.fit(Train_psi, y_train_psi, epochs=1, batch_size=200)
+    competition_history = model.fit(Train_psi, y_train_psi, epochs=2, batch_size=200)
     scores = model.evaluate(Test_psi, y_test_psi, verbose=0)
     print("Centered Trained & Tested CNN Error: %.2f%%" % (100 - scores[1] * 100))
     plot_history(competition_history)
